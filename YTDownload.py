@@ -32,18 +32,42 @@ class YTDownload():
 	# Download from Youtube
 		global file_size
 		YT = YouTube(URL, on_progress_callback=show_progress)
+		#print('A:',file_size)
 		#YT = YouTube(URL,on_progress_callback=self.show_progress)
 		YTstream = YT.streams.filter(file_extension='mp4',only_audio=True).first()
 		file_size = YTstream.filesize # Get video size
+		#print('B:',file_size)
 		#YTstream.download('/Users/useriii/Desktop')
 		YTstream.download(location)
-		#YTstream.on_progress_callback(chunk, file_handler, bytes_remaining)
 
+def show_progress(stream=None, chunk=None, file_handle=None, bytes_remaining=None):
+	#print('C:',file_size)
+	#print('D:',file_handle)
+	ch='*'
+	#chunk=0
+	chunk_count=0
+	#print('E:',bytes_remaining)
+	#chunks=str(chunk,encoding="utf-8")
+	#print('F:',chunks)
+	file_receive=file_size-bytes_remaining
+	#print('G:',file_receive)
+	#print('G:',chunk_count)
+	percent = (100*(file_receive))/file_size # Display 當前以下載進度
+	#print('G:',percent)
+	chunk_count = int(round(int(round(percent))/5))
+	#print('A:',chunk_count)
+	bar = ch*chunk_count
+	text = '|{bar}| {percent} %\r'.format(bar=bar,percent=percent)
+	time.sleep(0.1) # 等待時間不能太常，會造成buffer太久而形成connectionreseterror
+	sys.stdout.write(text)
+	sys.stdout.flush()
 
+'''
 def get_terminal_size():
 	rows,columns=os.popen('stty size', 'r').read().split()
 	return int(rows),int(columns)
-
+'''
+'''
 def show_progress(stream=None, chunk=None, file_handle=None, bytes_remaining=None):
 	ch='*'
 	scale=0.55
@@ -55,10 +79,11 @@ def show_progress(stream=None, chunk=None, file_handle=None, bytes_remaining=Non
 	bar=ch*filled+' '*remaining
 	percent = (100*(file_size-bytes_remaining))/file_size # Display 當前以下載進度
 	text= '|{bar}| {percent}%\r'.format(bar=bar,percent=percent)
-	print(text, end='\r')
-	#sys.stdout.write(text)
-	#sys.stdout.flush()
-	
+	#print(text, end='\r')
+	time.sleep(1)
+	sys.stdout.write(text)
+	sys.stdout.flush()
+'''	
 
 if __name__ == '__main__':
 	#file_size=0
@@ -71,6 +96,9 @@ if __name__ == '__main__':
 
 '''
 Reference Site:
+https://pypi.org/project/pytube/
+https://python-pytube.readthedocs.io/en/latest/_modules/pytube/streams.html?highlight=Progress%20bar
+https://www.cnblogs.com/yinxiangnan-charles/p/5645561.html
 http://python-pytube.readthedocs.io/en/latest/user/quickstart.html#working-with-streams
 https://docs.python.org.tw/3/howto/argparse.html
 https://stackoverflow.com/questions/15170547/passing-a-url-as-argument
@@ -80,6 +108,9 @@ https://www.unixmen.com/how-to-download-youtube-videos-pytube/
 http://kuanghy.github.io/2016/06/30/python-argparse
 https://yagisanatode.com/2018/03/11/how-to-create-a-simple-youtube-download-program-with-a-progress-in-python-3-with-pytube/
 https://faultinmycode.com/python-youtube-downloader/
+https://extenshu.com/2017/09/24/python%E5%88%9D%E5%AD%B8%E9%87%8D%E9%BB%9E-05-global%E8%AE%8A%E6%95%B8/
+http://www.cnblogs.com/huangjacky/archive/2012/04/19/2457842.html
+https://docs.python.org/3/library/exceptions.html#ConnectionError
 '''
 
 '''
@@ -94,6 +125,7 @@ http://www.runoob.com/python/os-getcwd.html
 
 '''
 python video
+
 https://www.youtube.com/watch?v=00agGNMNmTk
 https://www.youtube.com/user/wuchaiyen/playlists
 https://kknews.cc/zh-tw/tech/nx23grq.html
