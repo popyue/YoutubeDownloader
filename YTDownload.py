@@ -52,13 +52,14 @@ def show_progress(stream=None, chunk=None, file_handle=None, bytes_remaining=Non
 	file_receive=file_size-bytes_remaining
 	#print('G:',file_receive)
 	#print('G:',chunk_count)
-	percent = (100*(file_receive))/file_size # Display 當前以下載進度
+	percent = int((100*(file_receive))/file_size) # Display 當前以下載進度
 	#print('G:',percent)
-	chunk_count = int(round(int(round(percent))/5))
+	#chunk_count = int(round(int(round(percent))/5))
+	chunk_count = percent // 5
 	#print('A:',chunk_count)
-	bar = ch*chunk_count
+	bar = ch*chunk_count+' '*(20-chunk_count)
 	text = '|{bar}| {percent} %\r'.format(bar=bar,percent=percent)
-	time.sleep(0.1) # 等待時間不能太常，會造成buffer太久而形成connectionreseterror
+	time.sleep(0.01) # 等待時間不能太常，會造成buffer太久而形成connectionreseterror
 	sys.stdout.write(text)
 	sys.stdout.flush()
 
